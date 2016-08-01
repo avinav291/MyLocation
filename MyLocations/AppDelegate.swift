@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  MyLocations
 //
-//  Created by Avinav Goel on 22/02/16.
+//  Created by Avinav Goel on 13/04/16.
 //  Copyright © 2016 Avinav Goel. All rights reserved.
 //
 
@@ -11,9 +11,9 @@ import CoreData
 
 let MyManagedObjectContextSaveDidFailNotification = "MyManagedObjectContextSaveDidFailNotification"
 
-func fatalCoreDataError(error: ErrorProtocol) {
+func fatalCoreDataError(error: ErrorType) {
   print("*** Fatal error: \(error)")
-  NotificationCenter.default.post(name: NSNotification.Name(rawValue: MyManagedObjectContextSaveDidFailNotification), object: nil)
+  NSNotificationCenter.defaultCenter().postNotificationName(MyManagedObjectContextSaveDidFailNotification, object: nil)
 }
 
 @UIApplicationMain
@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
   lazy var managedObjectContext: NSManagedObjectContext = {
-    guard let modelURL = Bundle.main.urlForResource("DataModel", withExtension: "momd") else {
+    guard let modelURL = NSBundle.mainBundle().URLForResource("DataModel", withExtension: "momd") else {
       fatalError("Could not find data model in app bundle")
     }
     
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       fatalError("Error initializing model from: \(modelURL)")
     }
     
-    let urls = FileManager.default.urlsForDirectory(.documentDirectory, inDomains: .userDomainMask)
+    let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
     let documentsDirectory = urls[0]
     let storeURL = documentsDirectory.URLByAppendingPathComponent("DataStore.sqlite")
     print(storeURL)
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
       try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
       
-      let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+      let context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
       context.persistentStoreCoordinator = coordinator
       return context
     } catch {
@@ -48,10 +48,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }()
   
   func customizeAppearance() {
-    UINavigationBar.appearance().barTintColor = UIColor.black()
-    UINavigationBar.appearance().titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.white() ]
+    UINavigationBar.appearance().barTintColor = UIColor.blackColor()
+    UINavigationBar.appearance().titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.whiteColor() ]
     
-    UITabBar.appearance().barTintColor = UIColor.black()
+    UITabBar.appearance().barTintColor = UIColor.blackColor()
     
     let tintColor = UIColor(red: 255/255.0, green: 238/255.0, blue: 136/255.0, alpha: 1.0)
     UITabBar.appearance().tintColor = tintColor
@@ -105,21 +105,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func listenForFatalCoreDataNotifications() {
-    NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: MyManagedObjectContextSaveDidFailNotification), object: nil, queue: OperationQueue.main, using: { notification in
+    NSNotificationCenter.defaultCenter().addObserverForName(MyManagedObjectContextSaveDidFailNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { notification in
         
     let alert = UIAlertController(title: "Internal Error",
       message: "There was a fatal error in the app and it cannot continue.\n\n"
              + "Press OK to terminate the app. Sorry for the inconvenience.",
-      preferredStyle: .alert)
+      preferredStyle: .Alert)
     
-    let action = UIAlertAction(title: "OK", style: .default) { _ in
-      let exception = NSException(name: NSExceptionName.internalInconsistencyException, reason: "Fatal Core Data error", userInfo: nil)
+    let action = UIAlertAction(title: "OK", style: .Default) { _ in
+      let exception = NSException(name: NSInternalInconsistencyException, reason: "Fatal Core Data error", userInfo: nil)
       exception.raise()
     }
     
     alert.addAction(action)
     
-    self.viewControllerForShowingAlert().present(
+    self.viewControllerForShowingAlert().presentViewController(
       alert, animated: true, completion: nil)
     })
   }

@@ -2,7 +2,7 @@
 //  LocationCell.swift
 //  MyLocations
 //
-//  Created by Avinav Goel on 22/02/16.
+//  Created by Avinav Goel on 13/04/16.
 //  Copyright © 2016 Avinav Goel. All rights reserved.
 //
 
@@ -16,8 +16,8 @@ class LocationCell: UITableViewCell {
   
   override func awakeFromNib() {
     super.awakeFromNib()
-    backgroundColor = UIColor.black()
-    descriptionLabel.textColor = UIColor.white()
+    backgroundColor = UIColor.blackColor()
+    descriptionLabel.textColor = UIColor.whiteColor()
     descriptionLabel.highlightedTextColor = descriptionLabel.textColor
     addressLabel.textColor = UIColor(white: 1.0, alpha: 0.4)
     addressLabel.highlightedTextColor = addressLabel.textColor

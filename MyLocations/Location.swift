@@ -2,7 +2,7 @@
 //  Location.swift
 //  MyLocations
 //
-//  Created by Avinav Goel on 22/02/16.
+//  Created by Avinav Goel on 13/04/16.
 //  Copyright © 2016 Avinav Goel. All rights reserved.
 //
 
@@ -34,8 +34,8 @@ class Location: NSManagedObject, MKAnnotation {
 
   var photoPath: String {
     assert(photoID != nil, "No photo ID set")
-    let filename = "Photo-\(photoID!.intValue).jpg"
-    return (applicationDocumentsDirectory as NSString).appendingPathComponent(filename)
+    let filename = "Photo-\(photoID!.integerValue).jpg"
+    return (applicationDocumentsDirectory as NSString).stringByAppendingPathComponent(filename)
   }
   
   var photoImage: UIImage? {
@@ -43,9 +43,9 @@ class Location: NSManagedObject, MKAnnotation {
   }
   
   class func nextPhotoID() -> Int {
-    let userDefaults = UserDefaults.standard
-    let currentID = userDefaults.integer(forKey: "PhotoID")
-    userDefaults.set(currentID + 1, forKey: "PhotoID")
+    let userDefaults = NSUserDefaults.standardUserDefaults()
+    let currentID = userDefaults.integerForKey("PhotoID")
+    userDefaults.setInteger(currentID + 1, forKey: "PhotoID")
     userDefaults.synchronize()
     return currentID
   }
@@ -53,10 +53,10 @@ class Location: NSManagedObject, MKAnnotation {
   func removePhotoFile() {
     if hasPhoto {
       let path = photoPath
-      let fileManager = FileManager.default
-      if fileManager.fileExists(atPath: path) {
+      let fileManager = NSFileManager.defaultManager()
+      if fileManager.fileExistsAtPath(path) {
         do {
-          try fileManager.removeItem(atPath: path)
+          try fileManager.removeItemAtPath(path)
         } catch {
           print("Error removing file: \(error)")
         }

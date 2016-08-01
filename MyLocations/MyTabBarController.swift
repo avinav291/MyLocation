@@ -2,7 +2,7 @@ import UIKit
 
 class MyTabBarController: UITabBarController {
   override func preferredStatusBarStyle() -> UIStatusBarStyle {
-    return .lightContent
+    return .LightContent
   }
   
   override func childViewControllerForStatusBarStyle() -> UIViewController? {

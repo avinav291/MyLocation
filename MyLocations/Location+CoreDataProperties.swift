@@ -2,9 +2,11 @@
 //  Location+CoreDataProperties.swift
 //  MyLocations
 //
-//  Created by Avinav Goel on 22/02/16.
+//  Created by Avinav Goel on 13/04/16.
 //  Copyright © 2016 Avinav Goel. All rights reserved.
 //
+//  Delete this file and regenerate it using "Create NSManagedObject Subclass…"
+//  to keep your implementation up to date with your model.
 //
 
 import Foundation
